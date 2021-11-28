@@ -1,0 +1,22 @@
+{
+	"speed":5.0,
+	"left":65,
+	"right":68,
+	"forward":87,
+	"backward":83,
+	"upward":69,
+	"downward":81,
+	"reset":82,
+	"showWireFrame":71,
+	"showFill":70,
+	"cameraEye_x":0.0,
+	"cameraEye_y":1.0,
+	"cameraEye_z":20.0,
+	"cameraTarget_x":0.0,
+	"cameraTarget_y":0.0,
+	"cameraTarget_z":0.0,
+	"upVector_x":0.0,
+	"upVector_y":1.0,
+	"upVector_z":0.0,
+	"debug": false
+}

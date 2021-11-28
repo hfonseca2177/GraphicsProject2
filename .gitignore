@@ -21,12 +21,19 @@
 *.smod
 
 # Compiled Static libraries
+# Folders
+.vs/
+
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
 *.out
 *.app
+
+#Compilation folders
+GraphicsProj2/x64/
+x64/
