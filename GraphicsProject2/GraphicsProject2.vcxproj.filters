@@ -141,6 +141,21 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imGUI</Filter>
     </ClCompile>
+    <ClCompile Include="cShaderLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cModelCatalog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cSceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cShaderManager.h">
@@ -208,6 +223,21 @@
     </ClInclude>
     <ClInclude Include="iPhysicalObject.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="cShaderLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cModelCatalog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cSceneManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

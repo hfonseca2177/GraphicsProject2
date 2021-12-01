@@ -86,24 +86,25 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
 //
 //    }//if ( areAllModsUp(window) )...
 
-
+     //Scene loaded models
+    std::vector<cModel*> models = ::g_pSceneManager->GetModels();
 
     // If JUST the shift is down, move the "selected" object
     if ( cGFLWKeyboardModifiers::isModifierDown(pWindow, true, false, false ) )
     {
-        if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS ) { ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.x -= objectMovementSpeed; } // Go left
-        if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS ) { ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.x += objectMovementSpeed; } // Go right
-        if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS ) { ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.z += objectMovementSpeed; }// Go forward 
-        if ( glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS ) { ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.z -= objectMovementSpeed; }// Go backwards
-        if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS ) { ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.y -= objectMovementSpeed; }// Go "Down"
-        if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS ) { ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.y += objectMovementSpeed; }// Go "Up"
+        if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS ) { models[::g_selectedObject]->GetMesh()->positionXYZ.x -= objectMovementSpeed; } // Go left
+        if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS ) { models[::g_selectedObject]->GetMesh()->positionXYZ.x += objectMovementSpeed; } // Go right
+        if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS ) { models[::g_selectedObject]->GetMesh()->positionXYZ.z += objectMovementSpeed; }// Go forward 
+        if ( glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS ) { models[::g_selectedObject]->GetMesh()->positionXYZ.z -= objectMovementSpeed; }// Go backwards
+        if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS ) { models[::g_selectedObject]->GetMesh()->positionXYZ.y -= objectMovementSpeed; }// Go "Down"
+        if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS ) { models[::g_selectedObject]->GetMesh()->positionXYZ.y += objectMovementSpeed; }// Go "Up"
 
         std::stringstream strTitle;
         // std::cout << 
         strTitle << "::g_vec_pMeshes[" << ::g_selectedObject << "].positionXYZ : "
-            << ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.x << ", "
-            << ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.y << ", "
-            << ::g_vec_pMeshes[::g_selectedObject]->positionXYZ.z;// << std::endl;
+            << models[::g_selectedObject]->GetMesh()->positionXYZ.x << ", "
+            << models[::g_selectedObject]->GetMesh()->positionXYZ.y << ", "
+            << models[::g_selectedObject]->GetMesh()->positionXYZ.z;// << std::endl;
 
         ::g_TitleText = strTitle.str();
 

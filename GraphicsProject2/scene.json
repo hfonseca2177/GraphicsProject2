@@ -1,0 +1,94 @@
+{
+	"sceneName":"Lunar Crater",
+	"Objects":
+	[
+		{
+		  "name": "crater",
+		  "sourceFile": "copernicus_crater.ply",
+		  "textureName":"copernicus_crater_copernicus_crater_mat_BaseColor.bmp",
+		  "positionX":0.0,
+		  "positionY":-15.0,
+		  "positionZ":0.0,
+		  "scale":1.0,
+		  "radians":0.0,
+		  "enabled":true
+		},
+		{
+		  "name": "vehicle",
+		  "sourceFile": "space_exploration_vehicle.ply",
+		  "textureName":"vehicle_baseColor.bmp",
+		  "positionX": -20.0,
+		  "positionY": -5.0,
+		  "positionZ": 380.0,
+		  "scale":0.5,
+		  "radians":3.14,
+		  "enabled":true
+		},
+		{
+		  "name": "props",
+		  "sourceFile": "SM_props_inspect.ply",
+		  "textureName":"T_T_props_B.bmp",
+		  "positionX":-140.0,
+		  "positionY":-5.0,
+		  "positionZ":230.0,
+		  "scale":0.2,
+		  "radians":0.0,
+		  "enabled":true
+		},
+		{
+		  "name": "suit",
+		  "sourceFile": "z2_spacesuit.ply",
+		  "textureName":"suit_baseColor.bmp",
+		  "positionX":0.0,
+		  "positionY":-5.0,
+		  "positionZ":50.0,
+		  "scale":0.2,
+		  "radians":0.0,
+		  "enabled":true
+		},
+		{
+		  "name": "vog",
+		  "sourceFile": "VOG25M.ply",
+		  "textureName":"paper.bmp",
+		  "positionX": -20.0,
+		  "positionY": -5.0,
+		  "positionZ":10.0,
+		  "scale":0.2,
+		  "radians":0.0,
+		  "enabled":true
+		},
+		{
+		  "name": "box",
+		  "sourceFile": "ScifiBox.ply",
+		  "textureName":"DefaultMaterial_Roughness.bmp",
+		  "positionX":30.0,
+		  "positionY": -5.0,
+		  "positionZ": 188.0,
+		  "scale":10.0,
+		  "radians":0.0,
+		  "enabled":true
+		},
+		{
+		  "name": "box2",
+		  "sourceFile": "ScifiBox.ply",
+		  "textureName":"DefaultMaterial_Roughness.bmp",
+		  "positionX":70.0,
+		  "positionY": -5.0,
+		  "positionZ": 188.0,
+		  "scale":10.0,
+		  "radians":0.74,
+		  "enabled":true
+		},
+		{
+		  "name": "carrier",
+		  "sourceFile": "carrier01.ply",
+		  "textureName":"carrier01_diffuse.bmp",
+		  "positionX":-420.0,
+		  "positionY": 185.0,
+		  "positionZ": 1380.0,
+		  "scale":110.0,
+		  "radians":0.34,
+		  "enabled":true
+		}
+	]
+}

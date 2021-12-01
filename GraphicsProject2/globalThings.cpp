@@ -2,26 +2,29 @@
 
 cFlyCamera* g_pFlyCamera = NULL;
 cVAOManager* g_pVAOManager = NULL;
+cSceneManager* g_pSceneManager = NULL;
 cShaderManager* g_pShaderManager = NULL;
+cShaderLoader* g_pShaderLoader = NULL;
 cBasicTextureManager* g_pTextureManager = NULL;
 cLightManager* g_pTheLights = NULL;
-std::vector< cMesh* > g_vec_pMeshes;
-cMesh* g_pDebugSphere = NULL;
-bool g_bShowDebugShere = true;
+
 unsigned int g_selectedObject = 0;
 unsigned int g_selectedLight = 0;
 glm::vec3 g_heightMapUVOffsetRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 std::string g_TitleText = "";
-
+//
 bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh*& theObjectIFound);
 
 cMesh* g_findObjectByUniqueID(unsigned int uniqueID_toFind)
 {
-    for ( unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++ )
+    //Scene loaded models
+    std::vector<cModel*> models = ::g_pSceneManager->GetModels();
+    
+    for ( unsigned int index = 0; index != models.size(); index++ )
     {
-        if ( ::g_vec_pMeshes[index]->getUniqueID() == uniqueID_toFind )
+        if (models[index]->GetMesh()->getUniqueID() == uniqueID_toFind )
         {
-            return ::g_vec_pMeshes[index];
+            return models[index]->GetMesh();
         }
     }
     return NULL;
@@ -29,12 +32,15 @@ cMesh* g_findObjectByUniqueID(unsigned int uniqueID_toFind)
 
 bool g_findObjectByUniqueID( unsigned int uniqueID_toFind, cMesh &theObjectIFound )
 {
-    for ( unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++ )
+    //Scene loaded models
+    std::vector<cModel*> models = ::g_pSceneManager->GetModels();
+
+    for ( unsigned int index = 0; index != models.size(); index++ )
     {
-        if ( ::g_vec_pMeshes[index]->getUniqueID() == uniqueID_toFind )
+        if (models[index]->GetMesh()->getUniqueID() == uniqueID_toFind )
         {
             // Dereferences and returns a stack based copy
-            theObjectIFound = *(::g_vec_pMeshes[index]);
+            theObjectIFound = *(models[index]->GetMesh());
             return true;
         }
     }
@@ -43,12 +49,15 @@ bool g_findObjectByUniqueID( unsigned int uniqueID_toFind, cMesh &theObjectIFoun
 
 bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh* &theObjectIFound)
 {
-    for ( unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++ )
+    //Scene loaded models
+    std::vector<cModel*> models = ::g_pSceneManager->GetModels();
+
+    for ( unsigned int index = 0; index != models.size(); index++ )
     {
-        if ( ::g_vec_pMeshes[index]->getUniqueID() == uniqueID_toFind )
+        if (models[index]->GetMesh()->getUniqueID() == uniqueID_toFind )
         {
             // Returns a pointer to the object
-            theObjectIFound = ::g_vec_pMeshes[index];
+            theObjectIFound = models[index]->GetMesh();
             return true;
         }
     }
@@ -58,9 +67,12 @@ bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh* &theObjectIFoun
 // If not found, return NULL (0)
 cMesh* g_findObjectByFriendlyName(std::string NametoFind)
 {
-    for ( unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++ )
+    //Scene loaded models
+    std::vector<cModel*> models = ::g_pSceneManager->GetModels();
+
+    for ( unsigned int index = 0; index != models.size(); index++ )
     {
-        cMesh* pMeshToTest = ::g_vec_pMeshes[index];
+        cMesh* pMeshToTest = models[index]->GetMesh();
 
         // Is functionally the same thing as using a reference:
         //cMesh& meshToTest = g_vecMeshes[index];
@@ -76,9 +88,12 @@ cMesh* g_findObjectByFriendlyName(std::string NametoFind)
 
 cMesh* g_FindObjectByUniqueID(unsigned int uniqueID_toFind)
 {
-    for ( unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++ )
+    //Scene loaded models
+    std::vector<cModel*> models = ::g_pSceneManager->GetModels();
+
+    for ( unsigned int index = 0; index != models.size(); index++ )
     {
-        cMesh* pMeshToTest = ::g_vec_pMeshes[index];
+        cMesh* pMeshToTest = models[index]->GetMesh();
 
         // Is functionally the same thing as using a reference:
         //cMesh& meshToTest = g_vecMeshes[index];

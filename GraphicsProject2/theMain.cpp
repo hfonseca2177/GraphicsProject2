@@ -15,8 +15,6 @@
 #include <vector>
 #include <fstream>
 
-
-// Function signature for DrawObject()
 void DrawObject(
     cMesh* pCurrentMesh, 
     glm::mat4 matModel,
@@ -24,14 +22,6 @@ void DrawObject(
     GLint matModelInverseTranspose_Location,
     GLuint program,
     cVAOManager* pVAOManager);
-
-
-void DrawDebugObjects(
-    GLint matModel_Location,
-    GLint matModelInverseTranspose_Location,
-    GLuint program,
-    cVAOManager* pVAOManager);
-
 
 int main(void)
 {
@@ -78,285 +68,33 @@ int main(void)
     // Create global things
     ::g_StartUp(pWindow);
     
-    g_bShowDebugShere = false;
-
     ::g_pFlyCamera->setEye( glm::vec3(0.0f, 0.0f, 0.0f) );
 
-    cShaderManager::cShader vertShader;
-    vertShader.fileName = "assets/shaders/vertShader_01.glsl";
-        
-    cShaderManager::cShader fragShader;
-    fragShader.fileName = "assets/shaders/fragShader_01.glsl";
-
-    if (::g_pShaderManager->createProgramFromFile("Shader#1", vertShader, fragShader))
-    {
-        std::cout << "Shader compiled OK" << std::endl;
-        program = ::g_pShaderManager->getIDFromFriendlyName("Shader#1");
-    }
-    else
-    {
-        std::cout << "Error making shader program: " << std::endl;
-        std::cout << ::g_pShaderManager->getLastError() << std::endl;
-    }
+    //Load and map Shader scripts and variables
+    ::g_pShaderLoader->LoadShaders(program, ::g_pShaderManager);
 
     glUseProgram(program);
 
-    cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
-
-    int theUniformIDLoc = -1;
-    theUniformIDLoc = glGetUniformLocation(program, "matModel");
-    pShaderProc->mapUniformName_to_UniformLocation["matModel"] = theUniformIDLoc;
-    
-    // Or...
-    pShaderProc->mapUniformName_to_UniformLocation["matModel"] = glGetUniformLocation(program, "matModel");
-    pShaderProc->mapUniformName_to_UniformLocation["matView"] = glGetUniformLocation(program, "matView");
-    pShaderProc->mapUniformName_to_UniformLocation["matProjection"] = glGetUniformLocation(program, "matProjection");
-    pShaderProc->mapUniformName_to_UniformLocation["matModelInverseTranspose"] = glGetUniformLocation(program, "matModelInverseTranspose");
-
-    pShaderProc->mapUniformName_to_UniformLocation["wholeObjectSpecularColour"] = glGetUniformLocation(program, "wholeObjectSpecularColour");
-    // .. and so on...
-    pShaderProc->mapUniformName_to_UniformLocation["theLights[0].position"] = glGetUniformLocation(program, "wholeObjectSpecularColour");
-    // ... and so on..
-    // ************************************************
-
-    //GLint mvp_location = -1;
+    // Get "uniform locations" (aka the registers these are in)
     mvp_location = glGetUniformLocation(program, "MVP");
 
-    // Get "uniform locations" (aka the registers these are in)
-    GLint matModel_Location = glGetUniformLocation(program, "matModel");
-    GLint matView_Location = glGetUniformLocation(program, "matView");
-    GLint matProjection_Location = glGetUniformLocation(program, "matProjection");
-    GLint matModelInverseTranspose_Location = glGetUniformLocation(program, "matModelInverseTranspose");
+    GLint matModel_Location = g_pShaderLoader->GetModelLocation();
+    GLint matView_Location = g_pShaderLoader->GetViewLocation();
+    GLint matProjection_Location = g_pShaderLoader->GetProjectionLocation();
+    GLint matModelInverseTranspose_Location = g_pShaderLoader->GetModelInverseTransposeLocation();
 
-    ::g_pTheLights->theLights[0].position = glm::vec4(20.0f, -35.0f, 50.0f, 1.0f);
-    ::g_pTheLights->theLights[0].diffuse *= 0.001f;
-    ::g_pTheLights->theLights[0].param1.x = 2.0f;
-    ::g_pTheLights->theLights[0].direction = glm::vec4(20.0f, -15.0f, 380.0f, 1.0f);
-    ::g_pTheLights->theLights[0].param1.y = 5.0f;
-    ::g_pTheLights->theLights[0].param1.z = 5.0f;
-    ::g_pTheLights->theLights[0].atten.y = 0.0001f;
-    ::g_pTheLights->theLights[0].atten.z = 0.00001f;
-    ::g_pTheLights->theLights[0].param2.x = 1.0f;
-      
-
-    //::g_pTheLights->theLights[0].position = glm::vec4(0.0f, 10.0f,35.0f, 1.f);
-    //::g_pTheLights->theLights[0].diffuse *= 0.001f;
-    ////::g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
-    //::g_pTheLights->theLights[0].param1.x = 2.0f;
-    //::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, 55.0f, 0.0f, 1.f);
-    //::g_pTheLights->theLights[0].param1.y = 5.0f;
-    //::g_pTheLights->theLights[0].param1.z = 5.0f;
-    //::g_pTheLights->theLights[0].atten.y = 0.0001f;
-    //::g_pTheLights->theLights[0].atten.z = 0.00001f;
-    //::g_pTheLights->theLights[0].param2.x = 1.0f;
-    
-    ::g_pTheLights->theLights[1].position = glm::vec4(0.0f, 45.0f, 0.0f, 1.f);
-    //::g_pTheLights->theLights[1].diffuse *= 0.81f;
-    ::g_pTheLights->theLights[1].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
-    ::g_pTheLights->theLights[1].param1.x = 2.0f;
-    ::g_pTheLights->theLights[1].direction = glm::vec4(-0.0f, -15.0f, 0.0f, 1.f);
-    ::g_pTheLights->theLights[1].param1.y = 5.0f;
-    ::g_pTheLights->theLights[1].param1.z = 5.0f;
-    ::g_pTheLights->theLights[1].atten.y = 0.0001f;
-    ::g_pTheLights->theLights[1].atten.z = 0.00001f;
-    ::g_pTheLights->theLights[1].param2.x = 1.0f;
-
- /*   ::g_pTheLights->theLights[1].position = glm::vec4(-30.0f, -25.0f, 380.0f, 1.f);
-    ::g_pTheLights->theLights[1].atten.y = 0.0001f;
-    ::g_pTheLights->theLights[1].atten.z = 0.00001f;
-    ::g_pTheLights->theLights[1].param1.x = 1.0f;
-    ::g_pTheLights->theLights[1].direction = glm::vec4(-20.0f, -15.0f, 380.0f, 1.f);
-    ::g_pTheLights->theLights[1].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
-    ::g_pTheLights->theLights[1].param2.x = 1.0f;*/
-
-   // ::g_pTheLights->theLights[3].position = glm::vec4( 0.0f, 500.0f, 0.0f, 1.0f);
-   //::g_pTheLights->theLights[3].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-   //::g_pTheLights->theLights[3].param1.x = 0.0f;   
-   //::g_pTheLights->theLights[3].atten.x = 0.0f;
-   //::g_pTheLights->theLights[3].atten.y = 0.001f;
-   //::g_pTheLights->theLights[3].atten.z = 0.0001f;
-   //::g_pTheLights->theLights[3].param2.x = 1.0f;
+    //Scene manager to setup lights
+    ::g_pSceneManager->SetupLights();
 
     // Get the uniform locations of the light shader values
     ::g_pTheLights->SetUpUniformLocations(program);
-        
-    // Set up the debug sphere object
-    ::g_pDebugSphere = new cMesh();
-    ::g_pDebugSphere->meshName = "Sphere_xyz_n_rgba.ply";
-    ::g_pDebugSphere->bIsWireframe = true;
-    ::g_pDebugSphere->bUseObjectDebugColour = true;
-    ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pDebugSphere->bDontLight = false;
-    ::g_pDebugSphere->scale = 1.0f;
-    ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[2].position;
-    // Give this a friendly name
-    ::g_pDebugSphere->friendlyName = "Debug Sphere";
-    //// Then I could make a small function that searches for that name
 
+    //Set paths
     ::g_pVAOManager->setFilePath("assets/models/");
-
-    std::vector<std::string> vecModelsToLoad;
-
-    //Scene models
-    vecModelsToLoad.push_back("Sphere_xyz_n_rgba.ply");
-    vecModelsToLoad.push_back("copernicus_crater.ply");
-    vecModelsToLoad.push_back("space_exploration_vehicle.ply");
-    vecModelsToLoad.push_back("SM_props_inspect.ply");
-    vecModelsToLoad.push_back("z2_spacesuit.ply");
-    vecModelsToLoad.push_back("VOG25M.ply");
-    vecModelsToLoad.push_back("ScifiBox.ply");
-    vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
-    vecModelsToLoad.push_back("carrier01.ply");
-
-    
-    unsigned int totalVerticesLoaded = 0;
-    unsigned int totalTrianglesLoaded = 0;
-    for (std::vector<std::string>::iterator itModel = vecModelsToLoad.begin(); itModel != vecModelsToLoad.end(); itModel++)
-    {
-        sModelDrawInfo theModel;
-        std::string modelName = *itModel;
-        std::cout << "Loading " << modelName << "...";
-        if ( !::g_pVAOManager->LoadModelIntoVAO(modelName, theModel, program) )
-        {
-            std::cout << "didn't work because: " << std::endl;
-            std::cout << ::g_pVAOManager->getLastError(true) << std::endl;
-        }
-        else
-        {
-            std::cout << "OK." << std::endl;
-            std::cout << "\t" << theModel.numberOfVertices << " vertices and " << theModel.numberOfTriangles << " triangles loaded." << std::endl;
-            totalTrianglesLoaded += theModel.numberOfTriangles;
-            totalVerticesLoaded += theModel.numberOfVertices;
-        }
-    }
-
-    bool bDontLight = false;
-
-    cMesh* crater = new cMesh();
-    crater->meshName = "copernicus_crater.ply";
-    crater->positionXYZ = glm::vec3(0.0f, -15.0f, 0.0f);
-    crater->textureNames[0] = "copernicus_crater_copernicus_crater_mat_BaseColor.bmp";
-    crater->textureRatios[0] = 0.7f;
-    crater->friendlyName = "crater";
-    crater->bDontLight = bDontLight;
-    //crater->wholeObjectSpecularRGB = glm::vec3(0.128f, 0.128f, 0.255f);
-    ::g_selectedObject = 1;
-    ::g_vec_pMeshes.push_back(crater);
-
-    cMesh* vehicle = new cMesh();
-    vehicle->meshName = "space_exploration_vehicle.ply";
-    vehicle->positionXYZ = glm::vec3(-20.0f, -5.0f, 380.0f);
-    vehicle->scale = 0.5f;
-    vehicle->orientationXYZ.y = 3.14;
-    vehicle->textureNames[0] = "vehicle_baseColor.bmp";
-    vehicle->textureRatios[0] = 1.0f;
-    vehicle->friendlyName = "vehicle";
-    vehicle->bDontLight = bDontLight;
-    
-
-    ::g_vec_pMeshes.push_back(vehicle);
-
-    {
-        cMesh* newModel = new cMesh();
-        newModel->meshName = "SM_props_inspect.ply";
-        newModel->positionXYZ = glm::vec3(-140.0f, -5.0f, 230.0f);
-        newModel->scale = 0.2f;
-        //newModel->orientationXYZ.y = 3.14;
-        newModel->textureNames[0] = "T_T_props_B.bmp";
-        newModel->textureRatios[0] = 1.0f;
- /*       newModel->textureNames[1] = "details_BaseColor.bmp";
-        newModel->textureRatios[1] = 1.0f;*/
-        newModel->friendlyName = "props";
-        newModel->bDontLight = bDontLight;
-
-        ::g_vec_pMeshes.push_back(newModel);
-    }
-
-    {
-        cMesh* newModel = new cMesh();
-        newModel->meshName = "z2_spacesuit.ply";
-        newModel->positionXYZ = glm::vec3(0.0f, -5.0f, 50.0f);
-        newModel->scale = 0.2f;
-        //newModel->orientationXYZ.y = 3.14;
-        newModel->textureNames[0] = "suit_baseColor.bmp";
-        newModel->textureRatios[0] = 1.0f;
-        /*       newModel->textureNames[1] = "details_BaseColor.bmp";
-               newModel->textureRatios[1] = 1.0f;*/
-        newModel->friendlyName = "suit";
-        newModel->bDontLight = bDontLight;
-
-        ::g_vec_pMeshes.push_back(newModel);
-    }
-
-    {
-        cMesh* newModel = new cMesh();
-        newModel->meshName = "VOG25M.ply";
-        newModel->positionXYZ = glm::vec3(-20.0f, -5.0f, 10.0f);
-        newModel->scale = 0.2f;
-        //newModel->orientationXYZ.y = 3.14;
-        newModel->textureNames[0] = "paper.bmp";
-        newModel->textureRatios[0] = 1.0f;
-   
-        newModel->friendlyName = "vog";
-        newModel->bDontLight = bDontLight;
-
-        ::g_vec_pMeshes.push_back(newModel);
-    }
-
-    {
-        cMesh* newModel = new cMesh();
-        newModel->meshName = "ScifiBox.ply";
-        newModel->positionXYZ = glm::vec3(30.0f, -5.0f, 188.0f);
-        newModel->scale = 10.0f;
-        //newModel->orientationXYZ.y = 3.14;
-        newModel->textureNames[0] = "DefaultMaterial_Roughness.bmp";
-        newModel->textureRatios[0] = 1.0f;
-
-        newModel->friendlyName = "box";
-        newModel->bDontLight = bDontLight;
-
-        ::g_vec_pMeshes.push_back(newModel);
-    }
-
-    {
-        cMesh* newModel = new cMesh();
-        newModel->meshName = "ScifiBox.ply";
-        newModel->positionXYZ = glm::vec3(70.0f, -5.0f, 188.0f);
-        newModel->scale = 10.0f;
-        newModel->orientationXYZ.y = 0.74;
-        newModel->textureNames[0] = "DefaultMaterial_Roughness.bmp";
-        newModel->textureRatios[0] = 1.0f;
-        newModel->friendlyName = "box2";
-        newModel->bDontLight = bDontLight;
-        ::g_vec_pMeshes.push_back(newModel);
-    }
-
-    {
-        cMesh* newModel = new cMesh();
-        newModel->meshName = "carrier01.ply";
-        newModel->positionXYZ = glm::vec3(-420.0f, 185.0f, 1380.0f);
-        newModel->scale = 110.0f;
-        newModel->orientationXYZ.y = 0.34;
-        newModel->textureNames[0] = "carrier01_diffuse.bmp";
-        newModel->textureRatios[0] = 1.0f;
-        newModel->friendlyName = "carrier";
-        newModel->bDontLight = bDontLight;
-        ::g_vec_pMeshes.push_back(newModel);
-    }
-    
-           
-    
-    // Load the textures
     ::g_pTextureManager->SetBasePath("assets/textures");
-    ::g_pTextureManager->Create2DTextureFromBMPFile("copernicus_crater_copernicus_crater_mat_BaseColor.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("vehicle_baseColor.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("T_T_props_B.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("suit_baseColor.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("main_baseColor.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("paper.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("DefaultMaterial_Roughness.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("carrier01_diffuse.bmp", true);
-    
+
+    //Load Scene Objects
+    ::g_pSceneManager->LoadSceneModels(program);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -374,26 +112,17 @@ int main(void)
     }
    
     {
-        //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
         GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("violentdays");
-
-        // Be careful that you don't mix up the 2D and the cube assignments for the texture units
-        //
-        // Here, I'll say that the cube maps start at texture unit 40
-        //
         GLuint textureUnit = 40;			// Texture unit go from 0 to 79
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
-
         // ***NOTE*** Binding to a CUBE MAP not a 2D Texture
         glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
-
         // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
         GLint cubeMap_00_LocID = glGetUniformLocation(program, "cubeMap_00");
         glUniform1i(cubeMap_00_LocID, textureUnit);
 
     }
     
-
     // Create a skybox object (a sphere with inverted normals that moves with the camera eye)
     cMesh* pSkyBox = new cMesh();
     pSkyBox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
@@ -438,10 +167,6 @@ int main(void)
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();
 
-        // Place the "debug sphere" at the same location as the selected light (again)
-        ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
-        
-
         matProjection = glm::perspective(
             ::g_pFlyCamera->FOV,       
             ratio,
@@ -455,18 +180,14 @@ int main(void)
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
         glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
 
-
         matView = glm::mat4(1.0f);
         matView = glm::lookAt( cameraEye,
                                cameraAt,
                                cameraUp );
 
 
-        cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
-
-        glUniformMatrix4fv( pShaderProc->getUniformID_From_Name("matView"),
+        glUniformMatrix4fv(g_pShaderLoader->GetViewLocation(),
                             1, GL_FALSE, glm::value_ptr(matView));
-
 
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
 
@@ -490,11 +211,14 @@ int main(void)
             glEnable(GL_DEPTH_TEST);
         }
 
+        //Scene loaded models
+        std::vector<cModel*> models = ::g_pSceneManager->GetModels();
+
         //Draw each scene object
-        for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
+        for (unsigned int index = 0; index != models.size(); index++)
         {
             
-            cMesh* pCurrentMesh = ::g_vec_pMeshes[index];
+            cMesh* pCurrentMesh = models[index]->GetMesh();
             matModel = glm::mat4(1.0f);
             //trasparence
             {
@@ -529,8 +253,6 @@ int main(void)
 
         }
 
-        DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
-
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn
 
@@ -551,169 +273,5 @@ int main(void)
 
     glfwTerminate();
     exit(EXIT_SUCCESS);
-}
-
-
-
-
-
-void DrawDebugObjects(
-        GLint matModel_Location,
-        GLint matModelInverseTranspose_Location,
-        GLuint program,
-        cVAOManager* pVAOManager)
-{
-
-    if (::g_bShowDebugShere)
-    {
-        {   // Draw a sphere where the camera is looking.
-            // Take the at - eye --> vector 
-            glm::vec3 eye = ::g_pFlyCamera->getEye();
-            glm::vec3 at = ::g_pFlyCamera->getAtInWorldSpace();
-
-            glm::vec3 deltaDirection = at - eye;
-            // Normalize to make this vector 1.0 units in length
-            deltaDirection = glm::normalize(deltaDirection);
-
-            float SphereDistanceFromCamera = 300.0f;
-            glm::vec3 sphereLocation =
-                eye + (deltaDirection * SphereDistanceFromCamera);
-
-            // Draw the sphere
-
-            ::g_pDebugSphere->positionXYZ = sphereLocation;
-            ::g_pDebugSphere->scale = 5.0f;
-            ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
-
-            DrawObject(::g_pDebugSphere,
-                glm::mat4(1.0f),
-                matModel_Location,
-                matModelInverseTranspose_Location,
-                program,
-                ::g_pVAOManager);
-
-        }//Draw a sphere where the camera is looking.
-
-    }
-
-    if ( ::g_bShowDebugShere )
-    {
-        // Draw other things, like debug objects, UI, whatever
-        glm::mat4 matModelDS = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
-
-        // Draw a small white shere at the location of the light
-        sLight& currentLight = ::g_pTheLights->theLights[::g_selectedLight];
-
-        ::g_pDebugSphere->positionXYZ = currentLight.position;
-
-        ::g_pDebugSphere->scale = 1.0f;
-        ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-        DrawObject(::g_pDebugSphere,
-                   matModelDS,
-                   matModel_Location,
-                   matModelInverseTranspose_Location,
-                   program,
-                   ::g_pVAOManager);
-
-        // Save old debug sphere model name
-        std::string oldDebugSphereModel = ::g_pDebugSphere->meshName;
-
-        const float LOW_RES_SPHERE_DISTANCE = 50.0f;
-        const std::string LOW_RES_SPHERE_MODEL = "ISO_Shphere_flat_3div_xyz_n_rgba.ply";
-        const std::string HIGH_RES_SPHERE_MODEL = "ISO_Shphere_flat_4div_xyz_n_rgba.ply";
-
-        //float calcApproxDistFromAtten( 
-        //      float targetLightLevel, 
-        //      float accuracy, 
-        //      float infiniteDistance, 
-        //      float constAttenuation, 
-        //      float linearAttenuation,  
-        //      float quadraticAttenuation, 
-        //	    unsigned int maxIterations = DEFAULTMAXITERATIONS /*= 50*/ );
-
-                // How far away is 95% brightness?
-        float distTo95Percent = ::g_pTheLights->lightHelper.calcApproxDistFromAtten(0.95f,    /* the target light level I want*/
-                                                                          0.01f,    /*accuracy - how close to 0.25f*/
-                                                                          10000.0f, /*infinity away*/
-                                                                          currentLight.atten.x, /*const atten*/
-                                                                          currentLight.atten.y, /*linear atten*/
-                                                                          currentLight.atten.z, /*quadratic atten*/
-                                                                          cLightHelper::DEFAULTMAXITERATIONS);
-        // Draw a red sphere at 95%
-        ::g_pDebugSphere->scale = distTo95Percent;
-        ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
-
-        DrawObject(::g_pDebugSphere,
-                   matModelDS,
-                   matModel_Location,
-                   matModelInverseTranspose_Location,
-                   program,
-                   ::g_pVAOManager);
-
-        // How far away is 50% brightness?
-        float distTo50Percent = ::g_pTheLights->lightHelper.calcApproxDistFromAtten(0.50f,    /* the target light level I want*/
-                                                                          0.01f,    /*accuracy - how close to 0.25f*/
-                                                                          10000.0f, /*infinity away*/
-                                                                          currentLight.atten.x, /*const atten*/
-                                                                          currentLight.atten.y, /*linear atten*/
-                                                                          currentLight.atten.z, /*quadratic atten*/
-                                                                          cLightHelper::DEFAULTMAXITERATIONS);
-        // Draw a red sphere at 50%
-        ::g_pDebugSphere->scale = distTo50Percent;
-        ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
-        DrawObject(::g_pDebugSphere,
-                   matModelDS,
-                   matModel_Location,
-                   matModelInverseTranspose_Location,
-                   program,
-                   ::g_pVAOManager);
-
-        // How far away is 25% brightness?
-        float distTo25Percent = ::g_pTheLights->lightHelper.calcApproxDistFromAtten(0.25f,    /* the target light level I want*/
-                                                                          0.01f,    /*accuracy - how close to 0.25f*/
-                                                                          10000.0f, /*infinity away*/
-                                                                          currentLight.atten.x, /*const atten*/
-                                                                          currentLight.atten.y, /*linear atten*/
-                                                                          currentLight.atten.z, /*quadratic atten*/
-                                                                          cLightHelper::DEFAULTMAXITERATIONS);
-        // Draw a red sphere at 25%
-        ::g_pDebugSphere->scale = distTo25Percent;
-        ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
-        DrawObject(::g_pDebugSphere,
-                   matModelDS,
-                   matModel_Location,
-                   matModelInverseTranspose_Location,
-                   program,
-                   ::g_pVAOManager);
-
-        // How far away is 5% brightness?
-        float distTo5Percent = ::g_pTheLights->lightHelper.calcApproxDistFromAtten(0.05f,    /* the target light level I want*/
-                                                                         0.01f,    /*accuracy - how close to 0.25f*/
-                                                                         10000.0f, /*infinity away*/
-                                                                         currentLight.atten.x, /*const atten*/
-                                                                         currentLight.atten.y, /*linear atten*/
-                                                                         currentLight.atten.z, /*quadratic atten*/
-                                                                         cLightHelper::DEFAULTMAXITERATIONS);
-        // Draw a red sphere at 5%
-        ::g_pDebugSphere->scale = distTo5Percent;
-        ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
-        DrawObject(::g_pDebugSphere,
-                   matModelDS,
-                   matModel_Location,
-                   matModelInverseTranspose_Location,
-                   program,
-                   ::g_pVAOManager);
-
-
-        ::g_pDebugSphere->meshName = oldDebugSphereModel;
-
-    }//if ( ::g_bShowDebugShere )
-
-    return;
 }
 

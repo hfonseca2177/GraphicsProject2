@@ -4,6 +4,7 @@
 // Deletes global things, etc. 
 bool g_ShutDown(GLFWwindow* pWindow)
 {
+	delete  ::g_pShaderLoader;
 
 	delete ::g_pShaderManager;
 
@@ -15,6 +16,7 @@ bool g_ShutDown(GLFWwindow* pWindow)
 
 	delete ::g_pFlyCamera;
 
+	delete ::g_pSceneManager;
 
 	return true;
 }

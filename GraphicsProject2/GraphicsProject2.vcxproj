@@ -156,7 +156,10 @@
     <ClCompile Include="cLightHelper.cpp" />
     <ClCompile Include="cLightManager.cpp" />
     <ClCompile Include="cMesh.cpp" />
+    <ClCompile Include="cModel.cpp" />
+    <ClCompile Include="cModelCatalog.cpp" />
     <ClCompile Include="cShader.cpp" />
+    <ClCompile Include="cShaderLoader.cpp" />
     <ClCompile Include="cShaderManager.cpp" />
     <ClCompile Include="cVAOManager.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
@@ -171,8 +174,10 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="InputHandling.cpp" />
+    <ClCompile Include="JsonUtils.cpp" />
     <ClCompile Include="Load3DModels.cpp" />
     <ClCompile Include="Shutdown.cpp" />
+    <ClCompile Include="cSceneManager.cpp" />
     <ClCompile Include="StartUp.cpp" />
     <ClCompile Include="TextureMapping\C24BitBMPpixel.cpp" />
     <ClCompile Include="TextureMapping\cBasicTextureManager.cpp" />
@@ -186,6 +191,10 @@
     <ClInclude Include="cLightHelper.h" />
     <ClInclude Include="cLightManager.h" />
     <ClInclude Include="cMesh.h" />
+    <ClInclude Include="cModel.h" />
+    <ClInclude Include="cModelCatalog.h" />
+    <ClInclude Include="cSceneManager.h" />
+    <ClInclude Include="cShaderLoader.h" />
     <ClInclude Include="cShaderManager.h" />
     <ClInclude Include="cVAOManager.h" />
     <ClInclude Include="cWinContextMenu.h" />
@@ -200,6 +209,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="iPhysicalObject.h" />
+    <ClInclude Include="JsonUtils.h" />
     <ClInclude Include="sVertex_types.h" />
     <ClInclude Include="TextureMapping\C24BitBMPpixel.h" />
     <ClInclude Include="TextureMapping\cBasicTextureManager.h" />

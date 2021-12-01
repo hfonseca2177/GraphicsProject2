@@ -6,9 +6,12 @@
 #include "cFlyCamera.h"
 #include "cVAOManager.h"
 #include "cShaderManager.h"
+#include "cShaderLoader.h"
 #include "cLightManager.h"
+#include "cSceneManager.h"
 #include "TextureMapping/cBasicTextureManager.h"
 #include "cMesh.h"
+#include "cModelCatalog.h"
 #include <vector>
 
 
@@ -36,14 +39,12 @@ extern cFlyCamera* g_pFlyCamera; // = NULL;
 //extern glm::vec3 g_cameraAt;	//	= glm::vec3(0.0f, 0.0f, 0.0f);
 // ************************************************
            
+extern cSceneManager* g_pSceneManager;
 extern cVAOManager* g_pVAOManager;
 extern cShaderManager* g_pShaderManager;
+extern cShaderLoader* g_pShaderLoader;
 extern cBasicTextureManager* g_pTextureManager;
-
 extern cLightManager* g_pTheLights;
-
-extern cMesh* g_pDebugSphere;
-extern bool g_bShowDebugShere;
 
 extern unsigned int g_selectedObject;	// = 0;
 extern unsigned int g_selectedLight;	// = 0;
@@ -61,7 +62,7 @@ extern glm::vec3 g_heightMapUVOffsetRotation;
 
 
 // List of objects to draw
-extern std::vector< cMesh* > g_vec_pMeshes;
+//extern std::vector< cMesh* > g_vec_pMeshes;
 
 // Note: This returns a COPY of the object as a stack variable (not a pointer)
 bool g_FindObjectByUniqueID( unsigned int uniqueID_toFind, cMesh &theObjectIFound );

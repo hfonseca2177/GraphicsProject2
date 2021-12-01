@@ -10,7 +10,8 @@
 #include <iostream>
 
 // The global.h only has a forward declaration, so we need to include the actual header
-#include "cMesh.h"
+
+#include "cModel.h"
 
 cWinContextMenu::cWinContextMenu()
 {
@@ -70,21 +71,24 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     // Returns 0 if no choice made
    
     // Now process the choice we made with the mouse click
+     //Scene loaded models
+    std::vector<cModel*> models = ::g_pSceneManager->GetModels();
+
     switch ( choice )
     {
     case ID_MAKE_EVERYTHING_WIREFRAME:
         {//ID_MAKE_EVERYTHING_WIREFRAME
-            for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
+            for (unsigned int index = 0; index != models.size(); index++)
             {
-                ::g_vec_pMeshes[index]->bIsWireframe = true;
+                models[index]->GetMesh()->bIsWireframe = true;
             }
         }//ID_MAKE_EVERYTHING_WIREFRAME
         break;
     case ID_MAKE_EVERYTHING_SOLID:
         {//ID_MAKE_EVERYTHING_WIREFRAME
-            for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
+            for (unsigned int index = 0; index != models.size(); index++)
             {
-                ::g_vec_pMeshes[index]->bIsWireframe = false;
+                models[index]->GetMesh()->bIsWireframe = false;
             }
         }//ID_MAKE_EVERYTHING_WIREFRAME
         break;
