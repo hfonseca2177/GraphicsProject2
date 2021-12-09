@@ -98,37 +98,63 @@ int main(void)
 
     // Add a skybox texture
     std::string errorTextString;
-    
-    if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("violentdays",
-        "violentdays_rt.bmp",    /* posX_fileName */
-        "violentdays_lf.bmp",     /*negX_fileName */
-        "violentdays_dn.bmp",     /*posY_fileName*/
-        "violentdays_up.bmp",       /*negY_fileName*/
-        "violentdays_bk.bmp",     /*posZ_fileName*/
-        "violentdays_ft.bmp",    /*negZ_fileName*/
+    if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Space01",
+       //     "violentdays_rt.bmp",    /* posX_fileName */
+       //"violentdays_lf.bmp",     /*negX_fileName */
+       //"violentdays_dn.bmp",     /*posY_fileName*/
+       //"violentdays_up.bmp",       /*negY_fileName*/
+       //"violentdays_bk.bmp",     /*posZ_fileName*/
+       //"violentdays_ft.bmp",    /*negZ_fileName*/
+        //"TropicalSunnyDayRight2048.bmp",    /* posX_fileName */
+        //"TropicalSunnyDayLeft2048.bmp",     /*negX_fileName */
+        //"TropicalSunnyDayDown2048.bmp",     /*posY_fileName*/
+        //"TropicalSunnyDayUp2048.bmp",       /*negY_fileName*/
+        //"TropicalSunnyDayBack2048.bmp",     /*posZ_fileName*/
+        //"TropicalSunnyDayFront2048.bmp",    /*negZ_fileName*/
+        "SpaceBox_right1_posX.bmp",     /* posX_fileName */
+        "SpaceBox_left2_negX.bmp",      /*negX_fileName */
+        "SpaceBox_top3_posY.bmp",       /*posY_fileName*/
+        "SpaceBox_bottom4_negY.bmp",    /*negY_fileName*/
+        "SpaceBox_front5_posZ.bmp",     /*posZ_fileName*/
+        "SpaceBox_back6_negZ.bmp",      /*negZ_fileName*/
         true, errorTextString))
     {
         std::cout << "Didn't load because: " << errorTextString << std::endl;
     }
-   
-    {
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("violentdays");
-        GLuint textureUnit = 40;			// Texture unit go from 0 to 79
-        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
-        // ***NOTE*** Binding to a CUBE MAP not a 2D Texture
-        glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint cubeMap_00_LocID = glGetUniformLocation(program, "cubeMap_00");
-        glUniform1i(cubeMap_00_LocID, textureUnit);
 
-    }
-    
+    //
+    //if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Space01",
+    //    "violentdays_rt.bmp",    /* posX_fileName */
+    //    "violentdays_lf.bmp",     /*negX_fileName */
+    //    "violentdays_dn.bmp",     /*posY_fileName*/
+    //    "violentdays_up.bmp",       /*negY_fileName*/
+    //    "violentdays_bk.bmp",     /*posZ_fileName*/
+    //    "violentdays_ft.bmp",    /*negZ_fileName*/
+    //    true, errorTextString))
+    //{
+    //    std::cout << "Didn't load because: " << errorTextString << std::endl;
+    //}
+   
+    //{
+    //    GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Space01");
+    //    GLuint textureUnit = 40;			// Texture unit go from 0 to 79
+    //    glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+    //    // ***NOTE*** Binding to a CUBE MAP not a 2D Texture
+    //    glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
+    //    // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+    //    GLint cubeMap_00_LocID = glGetUniformLocation(program, "cubeMap_00");
+    //    glUniform1i(cubeMap_00_LocID, textureUnit);
+
+    //}
+    sModelDrawInfo drawInfo;
+    ::g_pVAOManager->LoadModelIntoVAO("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply", drawInfo, program);
+
     // Create a skybox object (a sphere with inverted normals that moves with the camera eye)
     cMesh* pSkyBox = new cMesh();
     pSkyBox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
-    pSkyBox->scale = 5'000.0f;
-    pSkyBox->positionXYZ = ::g_pFlyCamera->getEye();
-
+    pSkyBox->setUniformScale(::g_pFlyCamera->nearPlane * 1000.0f);
+    
+    pSkyBox->bDontLight = false;
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
 
@@ -207,8 +233,8 @@ int main(void)
                 program, ::g_pVAOManager);
 
             glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
-
             glEnable(GL_DEPTH_TEST);
+            glDepthMask(GL_TRUE);
         }
 
         //Scene loaded models
@@ -220,28 +246,6 @@ int main(void)
             
             cMesh* pCurrentMesh = models[index]->GetMesh();
             matModel = glm::mat4(1.0f);
-            //trasparence
-            {
-                GLint bDiscardTransparencyWindowsOn_LodID = glGetUniformLocation(program, "bDiscardTransparencyWindowsOn");
-                // Turn discard transparency off
-                glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_FALSE);
-                               
-                if (pCurrentMesh->friendlyName == "vog")
-                {
-                    
-                    GLuint discardTextureNumber = ::g_pTextureManager->getTextureIDFromName("paper.bmp");
-                    // I'm picking texture unit 30 since it's not in use.
-                    GLuint discardTextureUnit = 30;			// Texture unit go from 0 to 79
-                    glActiveTexture(discardTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
-                    glBindTexture(GL_TEXTURE_2D, discardTextureNumber);
-                    GLint discardTexture_LocID = glGetUniformLocation(program, "discardTexture");
-                    glUniform1i(discardTexture_LocID, discardTextureUnit);
-
-                    // Turn discard function on
-                    glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_TRUE);
-                }
-            }
-
 
 
             DrawObject(pCurrentMesh,

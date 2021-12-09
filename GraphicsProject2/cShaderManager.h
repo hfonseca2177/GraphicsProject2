@@ -8,13 +8,14 @@
 class cShaderManager
 {
 public:
-	class cShader  {
+	class cShader {
 	public:
 		cShader();
 		~cShader();
 		enum eShaderType
 		{
 			VERTEX_SHADER,
+			GEOMETRY_SHADER,
 			FRAGMENT_SHADER,
 			UNKNOWN
 		};
@@ -25,7 +26,7 @@ public:
 		std::vector<std::string> vecSource;
 		bool bSourceIsMultiLine;
 		std::string fileName;
-			
+
 	};
 
 	class cShaderProgram {
@@ -37,7 +38,7 @@ public:
 
 		// TODO: For the students to do, because it's FUN, FUN, FUN
 		std::map< std::string /*name of uniform variable*/,
-		          int /* uniform location ID */ > 
+			int /* uniform location ID */ >
 			mapUniformName_to_UniformLocation;
 
 		// You can also (and manybe should??) use
@@ -56,29 +57,33 @@ public:
 	cShaderManager();
 	~cShaderManager();
 
-	bool useShaderProgram( unsigned int ID );
-	bool useShaderProgram( std::string friendlyName );
-	bool createProgramFromFile( std::string friendlyName, 
-		                        cShader &vertexShad, 
-					            cShader &fragShader );
-	void setBasePath( std::string basepath );
-	unsigned int getIDFromFriendlyName( std::string friendlyName );
+	bool useShaderProgram(unsigned int ID);
+	bool useShaderProgram(std::string friendlyName);
+	bool createProgramFromFile(std::string friendlyName,
+		cShader& vertexShad,
+		cShader& fragShader);
+	bool createProgramFromFile(std::string friendlyName,
+		cShader& vertexShad,
+		cShader& geometryShad,
+		cShader& fragShader);
+	void setBasePath(std::string basepath);
+	unsigned int getIDFromFriendlyName(std::string friendlyName);
 
 	// Used to load the uniforms. Returns NULL if not found.
-	cShaderProgram* pGetShaderProgramFromFriendlyName( std::string friendlyName );
+	cShaderProgram* pGetShaderProgramFromFriendlyName(std::string friendlyName);
 
 
 	// Clears last error
 	std::string getLastError(void);
 private:
 	// Returns an empty string if it didn't work
-	bool m_loadSourceFromFile( cShader &shader );
+	bool m_loadSourceFromFile(cShader& shader);
 	std::string m_basepath;
 
-	bool m_compileShaderFromSource( cShader &shader, std::string &error );
+	bool m_compileShaderFromSource(cShader& shader, std::string& error);
 	// returns false if no error
-	bool m_wasThereACompileError( unsigned int shaderID, std::string &errorText );
-	bool m_wasThereALinkError( unsigned int progID, std::string &errorText );
+	bool m_wasThereACompileError(unsigned int shaderID, std::string& errorText);
+	bool m_wasThereALinkError(unsigned int progID, std::string& errorText);
 
 	std::string m_lastError;
 

@@ -19,7 +19,10 @@ void cShaderLoader::LoadShaders(GLuint& program, cShaderManager* _shaderManager)
     cShaderManager::cShader fragShader;
     fragShader.fileName = "assets/shaders/fragShader_01.glsl";
 
-    if (shaderManager->createProgramFromFile(DEFAULT_SHADER, vertShader, fragShader))
+    cShaderManager::cShader geomShader;
+    geomShader.fileName = "assets/shaders/geomShader.glsl";
+
+    if (shaderManager->createProgramFromFile(DEFAULT_SHADER, vertShader, geomShader, fragShader))
     {
         std::cout << "Shader compiled OK" << std::endl;         
         // Set the "program" variable to the one the Shader Manager used...

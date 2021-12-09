@@ -18,11 +18,17 @@ in vec4 vUVx2;					// 2 x Texture coords (vec4) UV0, UV1
 in vec4 vTangent;				// For bump mapping X,Y,Z (W ignored)
 in vec4 vBiNormal;				// For bump mapping X,Y,Z (W ignored)
 
+// This was what we sent to the fragment shader:
+//out vec4 fVertexColour;			// used to be "out vec3 color"
+//out vec4 fVertWorldLocation;
+//out vec4 fNormal;
+//out vec4 fUVx2;
+// Now we are sending data to the geometry shader:
+out vec4 gVertexColour;			// used to be "out vec3 color"
+out vec4 gVertWorldLocation;
+out vec4 gNormal;
+out vec4 gUVx2;
 
-out vec4 fVertexColour;			// used to be "out vec3 color"
-out vec4 fVertWorldLocation;
-out vec4 fNormal;
-out vec4 fUVx2;
 
 // For the height map example
 uniform sampler2D heightMapTexture;
@@ -111,19 +117,19 @@ void main()
     gl_Position = MVP * vertPosition; 		// Used to be: vec4(vPosition, 1.0f);	// Used to be vPos
 	
 	// The location of the vertex in "world" space (not screen space)
-	fVertWorldLocation = matModel * vertPosition;
+	gVertWorldLocation = matModel * vertPosition;
 	
 	// Copy the vertex colour to the fragment shader
 	// (if you want the colours from the original file used)
-    fVertexColour = vColour;		// Used to be vCol
+    gVertexColour = vColour;		// Used to be vCol
 	
 	// Calculate the normal based on any rotation we've applied.
 	// This inverse transpose removes scaling and tranlation (movement) 
 	// 	from the matrix.
-	fNormal = matModelInverseTranspose * normalize(vNormal);
-	fNormal = normalize(fNormal);
+	gNormal = matModelInverseTranspose * normalize(vNormal);
+	gNormal = normalize(gNormal);
 	
 		// Copy the rest of the vertex values:
-	fUVx2 = vUVx2;
+	gUVx2 = vUVx2;
 
 };

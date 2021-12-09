@@ -3,7 +3,6 @@
 #include "cModel.h"
 
 
-
 void cModel::load(sModelConfig config, GLuint& program, cVAOManager* gVAOManager, cBasicTextureManager* gTextureManager)
 {
     this->name = config.sourceFile;
@@ -13,7 +12,7 @@ void cModel::load(sModelConfig config, GLuint& program, cVAOManager* gVAOManager
     this->mesh->positionXYZ.x = config.positionX;
     this->mesh->positionXYZ.y = config.positionY;
     this->mesh->positionXYZ.z = config.positionZ;
-    this->mesh->scale = config.scale;
+    this->mesh->scaleXYZ = glm::vec3(config.scale);
     this->mesh->bDontLight = false;
     this->mesh->friendlyName = config.name;
     this->mesh->textureNames[0] = config.textureName;
@@ -78,9 +77,9 @@ glm::mat4 cModel::GetModelTransformation()
 
     // Scale the model
     glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
-        glm::vec3(this->mesh->scale,  // Scale in X
-            this->mesh->scale,  // Scale in Y
-            this->mesh->scale));// Scale in Z
+        glm::vec3(this->mesh->scaleXYZ.x,  // Scale in X
+            this->mesh->scaleXYZ.y,  // Scale in Y
+            this->mesh->scaleXYZ.z));// Scale in Z
 
     trasformation = trasformation * matTranslate;
     trasformation = trasformation * rotateZ;

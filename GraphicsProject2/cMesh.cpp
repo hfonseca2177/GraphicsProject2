@@ -6,10 +6,12 @@ cMesh::cMesh()
 	this->positionXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
 	this->orientationXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	this->scale = 1.0f;
+	this->scaleXYZ = glm::vec3(1.0f);
 
 	this->bIsWireframe = false;
 	this->bDisableDepthBufferCheck = false;
+
+	this->bIsImposter = false;
 
 	this->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);	// White
 	this->bUseObjectDebugColour = false;
@@ -22,7 +24,7 @@ cMesh::cMesh()
 	this->wholeObjectDiffuseRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);	// The "colour" of the object
 	//
 	// Specular HIGHLIGHT colour (usually the same as the light, or white)
-	this->wholeObjectSpecularRGB = glm::vec3(1.0f, 1.0f, 1.0f);			
+	this->wholeObjectSpecularRGB = glm::vec3(1.0f, 1.0f, 1.0f);
 	// Specular highlight POWER (or shininess). Starts at 1.0 and goes to ? (like 100, 1000, 10000 is OK)
 	this->wholeObjectShininess_SpecPower = 1.0f;	// 1.0 to ??
 
@@ -47,6 +49,19 @@ cMesh::cMesh()
 
 	this->bIsVisible = true;
 }
+
+void cMesh::setUniformScale(float uniformScale)
+{
+	this->scaleXYZ.x = this->scaleXYZ.y = this->scaleXYZ.z = uniformScale;
+	return;
+}
+
+float cMesh::getAverageScale(void)
+{
+	return (this->scaleXYZ.x + this->scaleXYZ.y + this->scaleXYZ.z) / 3.0f;
+}
+
+
 
 
 void cMesh::clearTextureRatiosToZero(void)

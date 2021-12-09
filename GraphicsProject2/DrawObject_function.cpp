@@ -26,16 +26,12 @@ void GLFW_window_size_callback(GLFWwindow* window, int width, int height)
 //  These don't change, so we should store them outside    
 void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 {
-    // HACK: To catch the debug 
-    //if (pCurrentMesh->meshName == "Mercurio_xyz_n_rgba_x100_Bigger_perturbed_surface_xyz_n_rgba_uv.ply")
-    //{
-    //    shaderProgram = -1;
-    //}
+   
 
     const GLuint FIRST_TEXTURE_UNIT = 0;
 
     //*****************************************************************************************
-    if ( pCurrentMesh->textureRatios[0] >= 0.0f )
+    if (pCurrentMesh->textureRatios[0] >= 0.0f)
     {
         // uniform sampler2D texture_00;
 //        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Fauci.bmp");
@@ -52,7 +48,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     //*****************************************************************************************
 
     //*****************************************************************************************
-    if ( pCurrentMesh->textureRatios[1] >= 0.0f) 
+    if (pCurrentMesh->textureRatios[1] >= 0.0f)
     {
         // uniform sampler2D texture_01;
         //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Pebbleswithquarzite.bmp");
@@ -69,7 +65,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     //*****************************************************************************************
 
     //*****************************************************************************************
-    if ( pCurrentMesh->textureRatios[2] >= 0.0f) 
+    if (pCurrentMesh->textureRatios[2] >= 0.0f)
     {
         // uniform sampler2D texture_01;
 //        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Lisse_mobile_shipyard-mal1.bmp");
@@ -86,7 +82,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     //*****************************************************************************************    
 
     //*****************************************************************************************
-    if ( pCurrentMesh->textureRatios[3] >= 0.0f) {
+    if (pCurrentMesh->textureRatios[3] >= 0.0f) {
         // uniform sampler2D texture_01;
 //        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
         GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
@@ -104,35 +100,35 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     // Set all the texture ratios in the shader
     GLint textureRatios0to3_LocID = glGetUniformLocation(shaderProgram, "texture2D_Ratios0to3");
     // Set them
-    glUniform4f( textureRatios0to3_LocID,
-        pCurrentMesh->textureRatios[0], 
-        pCurrentMesh->textureRatios[1], 
+    glUniform4f(textureRatios0to3_LocID,
+        pCurrentMesh->textureRatios[0],
+        pCurrentMesh->textureRatios[1],
         pCurrentMesh->textureRatios[2],
-        pCurrentMesh->textureRatios[3] );
+        pCurrentMesh->textureRatios[3]);
 
 
     // Our "1st" cubemap is set to texture unit 40 (so we don't overlap the 2D textures.
     // cubeMap_00 --> TropicalSunnyDay
     // cubeMap_01 --> Space01
-    //{
-    //    //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
-    //    GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("violentdays");
+    {
+        //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("TropicalSunnyDay");
 
-    //    // Be careful that you don't mix up the 2D and the cube assignments for the texture units
-    //    //
-    //    // Here, I'll say that the cube maps start at texture unit 40
-    //    //
-    //    GLuint textureUnit = 40;			// Texture unit go from 0 to 79
-    //    glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        // Be careful that you don't mix up the 2D and the cube assignments for the texture units
+        //
+        // Here, I'll say that the cube maps start at texture unit 40
+        //
+        GLuint textureUnit = 40;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
 
-    //    // ***NOTE*** Binding to a CUBE MAP not a 2D Texture
-    //    glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
+        // ***NOTE*** Binding to a CUBE MAP not a 2D Texture
+        glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
 
-    //    // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-    //    GLint cubeMap_00_LocID = glGetUniformLocation(shaderProgram, "cubeMap_00");
-    //    glUniform1i(cubeMap_00_LocID, textureUnit);
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint cubeMap_00_LocID = glGetUniformLocation(shaderProgram, "cubeMap_00");
+        glUniform1i(cubeMap_00_LocID, textureUnit);
 
-    //}
+    }
 
     {
         GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Space01");
@@ -154,9 +150,9 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         float howMuch_cubeMap_02 = 0.0f;
         float howMuch_cubeMap_03 = 0.0f;
 
-//        // HACK: Change the blend ratio of the skyboxes over time
-//        howMuch_cubeMap_00 = fabs( (float)glm::cos( glfwGetTime() / 10.0 ) );
-//        howMuch_cubeMap_01 = 1.0f - howMuch_cubeMap_00;
+        //        // HACK: Change the blend ratio of the skyboxes over time
+        //        howMuch_cubeMap_00 = fabs( (float)glm::cos( glfwGetTime() / 10.0 ) );
+        //        howMuch_cubeMap_01 = 1.0f - howMuch_cubeMap_00;
 
         glUniform4f(
             cubeMap_Ratios0to3_LocID,
@@ -174,25 +170,46 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
 
 void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
-                GLint matModel_Location,
-                GLint matModelInverseTranspose_Location,
-                GLuint program,
-                cVAOManager* pVAOManager)
+    GLint matModel_Location,
+    GLint matModelInverseTranspose_Location,
+    GLuint program,
+    cVAOManager* pVAOManager)
 {
-    
-    if ( ! pCurrentMesh->bIsVisible)
+
+    if (!pCurrentMesh->bIsVisible)
     {
         return;
     }
 
     // Set up textures for this object
-    SetUpTextures( pCurrentMesh, program );
+    SetUpTextures(pCurrentMesh, program);
 
+    // Is this thing transparent, or an impostor object?
+    if ((pCurrentMesh->alphaTransparency < 1.0f) || (pCurrentMesh->bIsImposter))
+    {
+        // Alpha transparency
+        glEnable(GL_BLEND);
+        // Basic "alpha transparency"
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    else
+    {
+        // It's not
+        glDisable(GL_BLEND);
+    }
 
-    // Alpha transparency
-    glEnable(GL_BLEND);
-    // Basic "alpha transparency"
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Set the flag if this is an impostor
+    GLint bIsImposter_LocID = glGetUniformLocation(program, "bIsImposter");
+    if (pCurrentMesh->bIsImposter)
+    {
+        glUniform1f(bIsImposter_LocID, (float)GL_TRUE);
+    }
+    else
+    {
+        glUniform1f(bIsImposter_LocID, (float)GL_FALSE);
+
+    }
+
 
 
     // Get the uniform (should be outside of the draw call)
@@ -203,43 +220,41 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
 
     // *****************************************************
     // Translate or "move" the object somewhere
-    glm::mat4 matTranslate = glm::translate( glm::mat4(1.0f),
-                                                pCurrentMesh->positionXYZ );
+    glm::mat4 matTranslate = glm::translate(glm::mat4(1.0f),
+        pCurrentMesh->positionXYZ);
     //matModel = matModel * matTranslate;
     // *****************************************************
 
 
     // *****************************************************
     // Rotation around the Z axis
-    glm::mat4 rotateZ = glm::rotate( glm::mat4(1.0f),
-                                        pCurrentMesh->orientationXYZ.z,//(float)glfwGetTime(),
-                                        glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f),
+        pCurrentMesh->orientationXYZ.z,//(float)glfwGetTime(),
+        glm::vec3(0.0f, 0.0f, 1.0f));
     //matModel = matModel * rotateZ;
     // *****************************************************
 
     // *****************************************************
     // Rotation around the Y axis
     glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f),
-                                    pCurrentMesh->orientationXYZ.y,
-                                    glm::vec3(0.0f, 1.0f, 0.0f));
+        pCurrentMesh->orientationXYZ.y,
+        glm::vec3(0.0f, 1.0f, 0.0f));
     //matModel = matModel * rotateY;
     // *****************************************************
-            
+
     // *****************************************************
     // Rotation around the X axis
     glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f),
-                                    pCurrentMesh->orientationXYZ.x,
-                                    glm::vec3(1.0f, 0.0f, 0.0f));
+        pCurrentMesh->orientationXYZ.x,
+        glm::vec3(1.0f, 0.0f, 0.0f));
     //matModel = matModel * rotateX;
     // *****************************************************
 
-            
+
     // *****************************************************
     // Scale the model
     glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
-                                    glm::vec3(pCurrentMesh->scale,  // Scale in X
-                                                pCurrentMesh->scale,  // Scale in Y
-                                                pCurrentMesh->scale));// Scale in Z
+        pCurrentMesh->scaleXYZ);
     //matModel = matModel * matScale;
     // *****************************************************
 
@@ -253,6 +268,12 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     matModel = matModel * rotateY;
     matModel = matModel * rotateX;
     matModel = matModel * matScale;     // <-- mathematically, this is 1st
+
+    // Save this matrix in the mesh object
+    pCurrentMesh->matLastDrawCallWorldMatrix = matModel;
+
+    // This used to have the Drop Ship lighting hack, but that's now in the cDropShip::Update()
+
 
 
     // Now the matModel ("Model" or "World") matrix
@@ -272,10 +293,6 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
 
     // Copy the whole object colour information to the sahder               
 
-    // This is used for wireframe or whole object colour. 
-    // If bUseDebugColour is TRUE, then the fragment colour is "objectDebugColour".
-    GLint bUseDebugColour_Location = glGetUniformLocation(program, "bUseDebugColour");
-    GLint objectDebugColour_Location = glGetUniformLocation(program, "objectDebugColour");
 
     // If true, then the lighting contribution is NOT used. 
     // This is useful for wireframe object
@@ -289,34 +306,38 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     if (pCurrentMesh->bUseWholeObjectDiffuseColour)
     {
         glUniform1f(bUseWholeObjectDiffuseColour_Location, (float)GL_TRUE);
-        glUniform4f(wholeObjectDiffuseColour_Location, 
-                    pCurrentMesh->wholeObjectDiffuseRGBA.r,
-                    pCurrentMesh->wholeObjectDiffuseRGBA.g,
-                    pCurrentMesh->wholeObjectDiffuseRGBA.b,
-                    pCurrentMesh->wholeObjectDiffuseRGBA.a);
+        glUniform4f(wholeObjectDiffuseColour_Location,
+            pCurrentMesh->wholeObjectDiffuseRGBA.r,
+            pCurrentMesh->wholeObjectDiffuseRGBA.g,
+            pCurrentMesh->wholeObjectDiffuseRGBA.b,
+            pCurrentMesh->wholeObjectDiffuseRGBA.a);
     }
     else
     {
         glUniform1f(bUseWholeObjectDiffuseColour_Location, (float)GL_FALSE);
     }
 
-    glUniform4f(wholeObjectSpecularColour_Location, 
-                pCurrentMesh->wholeObjectSpecularRGB.r,
-                pCurrentMesh->wholeObjectSpecularRGB.g,
-                pCurrentMesh->wholeObjectSpecularRGB.b,
-                pCurrentMesh->wholeObjectShininess_SpecPower);
+    glUniform4f(wholeObjectSpecularColour_Location,
+        pCurrentMesh->wholeObjectSpecularRGB.r,
+        pCurrentMesh->wholeObjectSpecularRGB.g,
+        pCurrentMesh->wholeObjectSpecularRGB.b,
+        pCurrentMesh->wholeObjectShininess_SpecPower);
 
 
+    // This is used for wireframe or whole object colour. 
+    // If bUseDebugColour is TRUE, then the fragment colour is "objectDebugColour".
+    GLint bUseDebugColour_Location = glGetUniformLocation(program, "bUseDebugColour");
+    GLint objectDebugColour_Location = glGetUniformLocation(program, "objectDebugColour");
     // See if mesh is wanting the vertex colour override (HACK) to be used?
     if (pCurrentMesh->bUseObjectDebugColour)
     {
         // Override the colour...
         glUniform1f(bUseDebugColour_Location, (float)GL_TRUE);
         glUniform4f(objectDebugColour_Location,
-                    pCurrentMesh->objectDebugColourRGBA.r, 
-                    pCurrentMesh->objectDebugColourRGBA.g,
-                    pCurrentMesh->objectDebugColourRGBA.b,
-                    pCurrentMesh->objectDebugColourRGBA.a);
+            pCurrentMesh->objectDebugColourRGBA.r,
+            pCurrentMesh->objectDebugColourRGBA.g,
+            pCurrentMesh->objectDebugColourRGBA.b,
+            pCurrentMesh->objectDebugColourRGBA.a);
     }
     else
     {
@@ -349,33 +370,47 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-            
+
+    // Depth buffer
+    if (pCurrentMesh->bDisableDepthBufferCheck)
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
 
 
     // glPointSize(20.0f); sometimes this works... Hey, it's not my fault!
 
+    if (pCurrentMesh->friendlyName == "Jupiter")
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+
 
 
     sModelDrawInfo modelInfo;
-//        if (gVAOManager.FindDrawInfoByModelName("bun_zipper_res2 (justXYZ).ply", modelInfo))
-//        if (gVAOManager.FindDrawInfoByModelName("Assembled_ISS.ply", modelInfo))
+    //        if (gVAOManager.FindDrawInfoByModelName("bun_zipper_res2 (justXYZ).ply", modelInfo))
+    //        if (gVAOManager.FindDrawInfoByModelName("Assembled_ISS.ply", modelInfo))
 
-    if ( pVAOManager->FindDrawInfoByModelName( pCurrentMesh->meshName, modelInfo) )
+    if (pVAOManager->FindDrawInfoByModelName(pCurrentMesh->meshName, modelInfo))
     {
         glBindVertexArray(modelInfo.VAO_ID);
 
         glDrawElements(GL_TRIANGLES,
-                        modelInfo.numberOfIndices, 
-                        GL_UNSIGNED_INT, 
-                        (void*)0);
+            modelInfo.numberOfIndices,
+            GL_UNSIGNED_INT,
+            (void*)0);
 
         glBindVertexArray(0);
     }
 
 
     // Now draw all the "child" objects.
-    for ( std::vector< cMesh* >::iterator itChildMesh = pCurrentMesh->vec_pChildMeshes.begin();
-          itChildMesh != pCurrentMesh->vec_pChildMeshes.end(); itChildMesh++ )
+    for (std::vector< cMesh* >::iterator itChildMesh = pCurrentMesh->vec_pChildMeshes.begin();
+        itChildMesh != pCurrentMesh->vec_pChildMeshes.end(); itChildMesh++)
     {
 
         cMesh* pChildMesh = *itChildMesh;
@@ -383,15 +418,6 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         // To clarify, we are passing this object's world matrix as the starting world matrix:
         // (this copy here isn't needed, but hopefully clarifies what's happening)
         glm::mat4 matModel_Parent = matModel;
-
-        // If the parent and child objects have DIFFERENT scales, 
-        //  then you should "undo" the scaling transform
-//        float reverseScale = 1.0f / pCurrentMesh->scale;
-//        glm::mat4 matReverseScale = glm::scale(glm::mat4(1.0f),
-//                                            glm::vec3(reverseScale,  // Scale in X
-//                                                      reverseScale,  // Scale in Y
-//                                                      reverseScale));// Scale in Z
-//        matModel_Parent = matModel_Parent * matReverseScale;
 
         // Call DrawObject again, but I pass the PARENT's final model matrix value
         // Which will make the child's "origin" at the final location of the parent. 

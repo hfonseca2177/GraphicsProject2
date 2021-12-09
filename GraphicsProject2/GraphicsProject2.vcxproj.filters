@@ -247,5 +247,6 @@
     <None Include="assets\shaders\vertShader_01.glsl">
       <Filter>ShaderManager\Shaders</Filter>
     </None>
+    <None Include="assets\shaders\geomShader.glsl" />
   </ItemGroup>
 </Project>

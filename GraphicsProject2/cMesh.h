@@ -27,14 +27,22 @@ public:
 
 	glm::vec3 positionXYZ;
 	glm::vec3 orientationXYZ;		// "angle"
-	float scale;
-	
+	// Changed this so that the flame imposter could be scaled
+	glm::vec3 scaleXYZ;
+	void setUniformScale(float uniformScale);
+	float getAverageScale(void);
+
 	bool bIsVisible;
 
 	// This is used for any scene graph. 
 	// When saving these to a file, you can save the 16 values of the matrix,
 	//	or some other way, like storing translation, rotation, scale, etc.
 	glm::mat4 matModelBaseOffset;
+
+	// This is the final world matrix that was set at the last draw call
+	// This is useful for finding where articulated (scene graph) models 
+	//	ended up being 
+	glm::mat4 matLastDrawCallWorldMatrix;
 
 	// Sets the overall colour of the object
 	//	by overwriting the colour variable
@@ -43,9 +51,9 @@ public:
 	bool bUseObjectDebugColour;
 	bool bDontLight;
 	// Changes polygon mode to LINES (instead of solid)
-	bool bIsWireframe;				
+	bool bIsWireframe;
 	// Turns of the depth buffer check when drawn
-	bool bDisableDepthBufferCheck;	
+	bool bDisableDepthBufferCheck;
 
 
 	// These are for colouring the ENTIRE object as one colour.
@@ -61,6 +69,10 @@ public:
 
 	// Alpha Transparency (0.0 to 1.0f)
 	float alphaTransparency;
+
+	// if true, the shader use a combination of discard and alpha transparency when drawing
+	bool bIsImposter;
+	//	float imposterDiscardThreshold;	// = 0.01f;
 
 	unsigned int getUniqueID(void);
 
